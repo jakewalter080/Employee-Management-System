@@ -112,3 +112,5 @@ async function addRole() {
     ]);
 }
 
+await pool.query(queries.addRole, [title, salary, departmentId]);
+console.log(`${title} has been added.`);
