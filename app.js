@@ -158,3 +158,45 @@ async function addEmployee() {
     await pool.query(queries.addEmployee, [firstName, lastName, roleId, managerId]);
     console.log(`${firstName} ${lastName} has been added.`);
 }
+
+async function updateEmployeeRole() {
+    const employees = await pool.query(queries.viewEmployees);
+    const roles = await pool.query(queries.viewRoles);
+    const {employeeId, roleId} = await inquirer.prompt([
+        {
+            type: `list`,
+            name: `employeeId`,
+            message: `Select the employee to update:`,
+            choices: employees.rows.map(employee => ({
+                name: `${employee.first_name} ${employee.last_name}`,
+                value: employee.id
+            }))
+        },
+        {
+            type: `list`,
+            name: `roleId`,
+            message: `Select the employee's new role:`,
+            choices: roles.rows.map(role => ({
+                name: role.title,
+                value: role.id
+            }))
+        }
+    ]);
+// need to add newRoleId to the queries.js file
+    await pool.query(queries.updateEmployeeRole, [newRoleId, employeeId]);
+    console.log(`Employee role has been updated.`);
+}
+
+async function main() {
+    try{
+        await pool.connect();
+        console.log(`Connected to the database.`);
+        await mainMenu();
+    } catch (error) {
+        console.error(`Error`, error);
+    } finally {
+        await pool.end();
+    }
+}
+
+main();
