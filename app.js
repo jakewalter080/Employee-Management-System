@@ -114,3 +114,47 @@ async function addRole() {
 
 await pool.query(queries.addRole, [title, salary, departmentId]);
 console.log(`${title} has been added.`);
+
+async function addEmployee() {
+    const roles = await pool.query(queries.viewRoles);
+    const employees = await pool.query(queries.viewEmployees);
+    const {firstName, lastName, roleId, managerId} = await inquirer.prompt([
+        {
+            type: `input`,
+            name: `firstName`,
+            message: `Enter the employee's first name:`
+        },
+        {
+            type: `input`,
+            name: `lastName`,
+            message: `Enter the employee's last name:`
+        },
+        {
+            type: `list`,
+            name: `roleId`,
+            message: `Select the employee's role:`,
+            choices: roles.rows.map(role => ({
+                name: role.title,
+                value: role.id
+            }))
+        },
+        {
+            type: `list`,
+            name: `managerId`,
+            message: `Select the employee's manager:`,
+            choices: [
+                {
+                    name: `None`,
+                    value: null
+                },
+                ...employees.rows.map(employee => ({
+                    name: `${employee.first_name} ${employee.last_name}`,
+                    value: employee.id
+                }))
+            ]
+        }
+    ]);
+
+    await pool.query(queries.addEmployee, [firstName, lastName, roleId, managerId]);
+    console.log(`${firstName} ${lastName} has been added.`);
+}
