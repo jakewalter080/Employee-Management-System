@@ -62,3 +62,53 @@ async function mainMenu() {
 async function viewDepartments() {
     const results = await pool.query(queries.viewDepartments);
     console.table(results.rows);
+}
+
+async function viewRoles() {
+    const results = await pool.query(queries.viewRoles);
+    console.table(results.rows);
+}
+
+async function viewEmployees() {
+    const results = await pool.query(queries.viewEmployees);
+    console.table(results.rows);
+}
+
+async function addDepartment() {
+    const {departmentName} = await inquirer.prompt([
+        {
+            type: `input`,
+            name: `departmentName`,
+            message: `Enter the name of the department:`
+        }
+    ]);
+
+    await pool.query(queries.addDepartment, [departmentName]);
+    console.log(`${departmentName} has been added.`);
+}
+
+async function addRole() {
+    const departments = await pool.query(queries.viewDepartments);
+    const {title, salary, departmentId} = await inquirer.prompt([
+        {
+            type: `input`,
+            name: `title`,
+            message: `Enter the title of the role:`
+        },
+        {
+            type: `input`,
+            name: `salary`,
+            message: `Enter the salary of the role:`
+        },
+        {
+            type: `list`,
+            name: `departmentId`,
+            message: `Select the department for the role:`,
+            choices: departments.rows.map(department => ({
+                name: department.name,
+                value: department.id
+            }))
+        }
+    ]);
+}
+
