@@ -1,18 +1,18 @@
 module.exports = {
-    VIEW_ALL_DEPARTMENTS; `
+    VIEW_ALL_DEPARTMENTS: `
         SELECT id, name
         FROM department
         ORDER BY id;
     `,
 
-    VIEW_ALL_ROLES; `
+    VIEW_ALL_ROLES: `
         SELECT role.id, role.title, role.salary, department.name AS department
         FROM role r
         JOIN department d ON r.department_id = d.id
         ORDER BY role.id;
     `,
 
-    VIEW_ALL_EMPLOYEES; `
+    VIEW_ALL_EMPLOYEES: `
         SELECT 
         employee.id, 
         employee.first_name, 
@@ -28,42 +28,43 @@ module.exports = {
         ORDER BY employee.id;
     `,
 
-    ADD_DEPARTMENT; `
+    ADD_DEPARTMENT: `
         INSERT INTO department (name)
         VALUES ($1)
         RETURNING id;
     `,
 
-    ADD_ROLE; `
+    ADD_ROLE: `
         INSERT INTO role (title, salary, department_id)
         VALUES ($1, $2, $3)
         RETURNING id;
     `,
 
-    ADD_EMPLOYEE; `
+    ADD_EMPLOYEE: `
         INSERT INTO employee (first_name, last_name, role_id, manager_id)
         VALUES ($1, $2, $3, $4)
         RETURNING id;
     `,
 
-    UPDATE_EMPLOYEE_ROLE; `
+    UPDATE_EMPLOYEE_ROLE: `
         UPDATE employee
         SET role_id = $1
         WHERE id = $2;
     `,
 
-    GET_ALL_DEPARTMENTS; `
+    GET_ALL_DEPARTMENTS: `
         SELECT id, name
         FROM department;
         ORDER BY name;
     `,
 
-    GET_ALL_ROLES; `
+    GET_ALL_ROLES: `
         SELECT id, title
         FROM role;
         ORDER BY title;
     `,
-    GET_ALL_EMPLOYEES; `
+    
+    GET_ALL_EMPLOYEES: `
         SELECT id, CONCAT(first_name, ' ', last_name) AS name
         FROM employee
         ORDER BY last_name, first_name;

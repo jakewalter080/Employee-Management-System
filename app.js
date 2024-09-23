@@ -60,17 +60,17 @@ async function mainMenu() {
 }
 
 async function viewDepartments() {
-    const results = await pool.query(queries.viewDepartments);
+    const results = await pool.query(queries.VIEW_ALL_DEPARTMENTS);
     console.table(results.rows);
 }
 
 async function viewRoles() {
-    const results = await pool.query(queries.viewRoles);
+    const results = await pool.query(queries.VIEW_ALL_ROLES);
     console.table(results.rows);
 }
 
 async function viewEmployees() {
-    const results = await pool.query(queries.viewEmployees);
+    const results = await pool.query(queries.VIEW_ALL_EMPLOYEES);
     console.table(results.rows);
 }
 
@@ -83,12 +83,12 @@ async function addDepartment() {
         }
     ]);
 
-    await pool.query(queries.addDepartment, [departmentName]);
+    await pool.query(queries.ADD_DEPARTMENT, [departmentName]);
     console.log(`${departmentName} has been added.`);
 }
 
 async function addRole() {
-    const departments = await pool.query(queries.viewDepartments);
+    const departments = await pool.query(queries.GET_ALL_DEPARTMENTS);
     const {title, salary, departmentId} = await inquirer.prompt([
         {
             type: `input`,
@@ -112,12 +112,12 @@ async function addRole() {
     ]);
 }
 
-await pool.query(queries.addRole, [title, salary, departmentId]);
+await pool.query(queries.ADD_ROLE, [title, salary, departmentId]);
 console.log(`${title} has been added.`);
 
 async function addEmployee() {
-    const roles = await pool.query(queries.viewRoles);
-    const employees = await pool.query(queries.viewEmployees);
+    const roles = await pool.query(queries.GET_ALL_ROLES);
+    const employees = await pool.query(queries.GET_ALL_EMPLOYEES);
     const {firstName, lastName, roleId, managerId} = await inquirer.prompt([
         {
             type: `input`,
@@ -155,13 +155,13 @@ async function addEmployee() {
         }
     ]);
 
-    await pool.query(queries.addEmployee, [firstName, lastName, roleId, managerId]);
+    await pool.query(queries.ADD_EMPLOYEE, [firstName, lastName, roleId, managerId]);
     console.log(`${firstName} ${lastName} has been added.`);
 }
 
 async function updateEmployeeRole() {
-    const employees = await pool.query(queries.viewEmployees);
-    const roles = await pool.query(queries.viewRoles);
+    const employees = await pool.query(queries.GET_ALL_EMPLOYEES);
+    const roles = await pool.query(queries.GET_ALL_ROLES);
     const {employeeId, roleId} = await inquirer.prompt([
         {
             type: `list`,
@@ -183,7 +183,7 @@ async function updateEmployeeRole() {
         }
     ]);
 // need to add newRoleId to the queries.js file
-    await pool.query(queries.updateEmployeeRole, [newRoleId, employeeId]);
+    await pool.query(queries.UPDATE_EMPLOYEE_ROLE, [newRoleId, employeeId]);
     console.log(`Employee role has been updated.`);
 }
 
