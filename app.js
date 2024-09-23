@@ -4,10 +4,10 @@ const queries = require('./queries');
 
 // PostgreSQL connection configuration
 const pool = new Pool({
-    user: 'your_username',
+    user: '',
     host: 'localhost',
     database: 'employee_tracker',
-    password: 'your_password',
+    password: 'Walte1234',
     port: 5432,
 });
 
