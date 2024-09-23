@@ -28,5 +28,37 @@ async function mainMenu() {
                 `Exit`
             ]
         }
-    ])
+    ]);
+
+    switch (choice) {
+        case `View all departments`:
+            return viewDepartments();
+            break;
+        case `View all roles`:
+            return viewRoles();
+            break;
+        case `View all employees`:
+            return viewEmployees();
+            break;
+        case `Add a department`:
+            return addDepartment();
+            break;
+        case `Add a role`:
+            return addRole();
+            break;
+        case `Add an employee`:
+            return addEmployee();
+            break;
+        case `Update an employee role`:
+            return updateEmployeeRole();
+            break;
+        case `Exit`:
+            console.log(`Goodbye!`);
+            process.exit(0);
+    }
+    mainMenu();
 }
+
+async function viewDepartments() {
+    const results = await pool.query(queries.viewDepartments);
+    console.table(results.rows);
