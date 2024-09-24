@@ -1,15 +1,17 @@
+import dotenv from 'dotenv';
 import inquirer from 'inquirer';
 import pkg from 'pg';
 const { Pool } = pkg;
 import queries from './queries.js';
+dotenv.config();
 
 // PostgreSQL connection configuration
 const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'employee_tracker',
-    password: 'Walte1234',
-    port: 5432,
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
 });
 
 async function mainMenu() {

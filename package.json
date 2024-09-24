@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "dotenv": "^16.4.5",
     "inquirer": "^11.0.2",
     "pg": "^8.13.0"
   },
@@ -8,7 +9,6 @@
   "description": "",
   "type": "module",
   "main": "app.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
