@@ -31,7 +31,7 @@ psql - u postgres
 node app.js
 ```
 - Follow the prompts to view, add, or update employee information.
-- Link to walkthrough video (Add your video link here)
+- Link to walkthrough video [(https://youtu.be/kAYO6kZYBjo)](https://youtu.be/kAYO6kZYBjo)
 
 ## Features
 
@@ -65,12 +65,12 @@ Thank you for your interest, if you would like to contribute reach out to me via
 
 ## Tests
 
-Test this app in VS Code. Open the terminal, move into app.js directory, run 'node app.js'. Answer the prompts and follow the prompts
+Test this app in VS Code. Open the terminal, move into your root directory, run 'node app.js'. Answer the prompts and follow the prompts
 
 ## Questions
 
 Please feel free to contact me at:
 
-[GitHub](https://github.com/jakewalter080)
+[(GitHub)](https://github.com/jakewalter080)
 
-[Email: jakewalter080@gmail.com](https://jakewalter080@gmail.com)
+[(Email: jakewalter080@gmail.com)](https://jakewalter080@gmail.com)
