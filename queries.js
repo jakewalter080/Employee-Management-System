@@ -76,4 +76,16 @@ export default {
         WHERE e.id IN (SELECT DISTINCT manager_id FROM employee WHERE manager_id IS NOT NULL)
         ORDER BY name;
     `,
+
+    GET_ALL_EMPLOYEES_WITH_ROLES: `
+    SELECT 
+      e.id, 
+      CONCAT(e.first_name, ' ', e.last_name, ' (', r.title, ')') AS name_and_role
+    FROM 
+      employee e
+    JOIN 
+      role r ON e.role_id = r.id
+    ORDER BY 
+      e.last_name, e.first_name;
+  `,
 };
