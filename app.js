@@ -161,15 +161,16 @@ async function addEmployee() {
 }
 
 async function updateEmployeeRole() {
-    const employees = await pool.query(queries.GET_ALL_EMPLOYEES);
+    const employeesWithRoles = await pool.query(queries.GET_ALL_EMPLOYEES_WITH_ROLES);
     const roles = await pool.query(queries.GET_ALL_ROLES);
+    
     const { employeeId, newRoleId } = await inquirer.prompt([
         {
             type: 'list',
             name: 'employeeId',
             message: 'Select the employee to update:',
-            choices: employees.rows.map(employee => ({
-                name: `${employee.first_name} ${employee.last_name}`,
+            choices: employeesWithRoles.rows.map(employee => ({
+                name: employee.name_and_role,
                 value: employee.id
             }))
         },
