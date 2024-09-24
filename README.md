@@ -46,29 +46,11 @@ node app.js
 ### Database Schema
 The database consists of three tables:
 
-- department
-```
-id: SERIAL PRIMARY KEY
-name: VARCHAR(30) UNIQUE NOT NULL
-```
+- Department
 
-- role
-```
-id: SERIAL PRIMARY KEY
-title: VARCHAR(30) UNIQUE NOT NULL
-salary: DECIMAL NOT NULL
-department_id: INTEGER NOT NULL (foreign key to department.id)
-```
+- Roles
 
-- employee
-```
-id: SERIAL PRIMARY KEY
-first_name: VARCHAR(30) NOT NULL
-last_name: VARCHAR(30) NOT NULL
-role_id: INTEGER NOT NULL (foreign key to role.id)
-manager_id: INTEGER (foreign key to employee.id, can be null)
-```
-
+- Employee
 
 ## Technologies Used
 
