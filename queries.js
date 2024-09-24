@@ -54,13 +54,13 @@ VIEW_ALL_EMPLOYEES: `
 
     GET_ALL_DEPARTMENTS: `
         SELECT id, name
-        FROM department;
+        FROM department
         ORDER BY name;
     `,
 
     GET_ALL_ROLES: `
         SELECT id, title
-        FROM role;
+        FROM role
         ORDER BY title;
     `,
     
