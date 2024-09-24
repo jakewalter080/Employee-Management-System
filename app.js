@@ -1,6 +1,7 @@
-const inquirer = require('inquirer');
-const { Pool } = require('pg');
-const queries = require('./queries');
+import inquirer from 'inquirer';
+import pkg from 'pg';
+const { Pool } = pkg;
+import queries from './queries.js';
 
 // PostgreSQL connection configuration
 const pool = new Pool({
@@ -12,6 +13,7 @@ const pool = new Pool({
 });
 
 async function mainMenu() {
+    while (true) {
     const { choice } = await inquirer.prompt([
         {
             type: 'list',
@@ -54,9 +56,9 @@ async function mainMenu() {
             break;
         case 'Exit':
             console.log('Goodbye!');
-            process.exit(0);
+            return;
+        }
     }
-    mainMenu();
 }
 
 async function viewDepartments() {
@@ -109,6 +111,7 @@ async function addRole() {
                 value: department.id
             }))
         }
+        
     ]);
 
     await pool.query(queries.ADD_ROLE, [title, salary, departmentId]);
@@ -117,7 +120,8 @@ async function addRole() {
 
 async function addEmployee() {
     const roles = await pool.query(queries.GET_ALL_ROLES);
-    const employees = await pool.query(queries.GET_ALL_EMPLOYEES);
+    const managers = await pool.query(queries.GET_ALL_MANAGERS);
+    
     const { firstName, lastName, roleId, managerId } = await inquirer.prompt([
         {
             type: 'input',
@@ -143,13 +147,10 @@ async function addEmployee() {
             name: 'managerId',
             message: "Select the employee's manager:",
             choices: [
-                {
-                    name: 'None',
-                    value: null
-                },
-                ...employees.rows.map(employee => ({
-                    name: `${employee.first_name} ${employee.last_name}`,
-                    value: employee.id
+                { name: 'None', value: null },
+                ...managers.rows.map(manager => ({
+                    name: manager.name,
+                    value: manager.id
                 }))
             ]
         }

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     VIEW_ALL_DEPARTMENTS: `
         SELECT id, name
         FROM department
@@ -12,21 +12,21 @@ module.exports = {
     ORDER BY r.id;
 `,
 
-VIEW_ALL_EMPLOYEES: `
+    VIEW_ALL_EMPLOYEES: `
     SELECT 
-    employee.id, 
-    employee.first_name, 
-    employee.last_name, 
-    role.title, 
-    department.name AS department, 
-    role.salary, 
-    CONCAT(mmanager.first_name, ' ', mmanager.last_name) AS manager
+    e.id, 
+    e.first_name, 
+    e.last_name, 
+    r.title, 
+    d.name AS department, 
+    r.salary, 
+    CONCAT(m.first_name, ' ', m.last_name) AS manager
     FROM employee e
-    JOIN role r ON e.role_id = r.id
-    JOIN department d ON r.department_id = d.id
+    LEFT JOIN role r ON e.role_id = r.id
+    LEFT JOIN department d ON r.department_id = d.id
     LEFT JOIN employee m ON e.manager_id = m.id
     ORDER BY e.id;
-`,
+    `,
 
     ADD_DEPARTMENT: `
         INSERT INTO department (name)
@@ -68,5 +68,12 @@ VIEW_ALL_EMPLOYEES: `
         SELECT id, CONCAT(first_name, ' ', last_name) AS name
         FROM employee
         ORDER BY last_name, first_name;
+    `,
+
+    GET_ALL_MANAGERS: `
+        SELECT DISTINCT e.id, CONCAT(e.first_name, ' ', e.last_name) AS name
+        FROM employee e
+        WHERE e.id IN (SELECT DISTINCT manager_id FROM employee WHERE manager_id IS NOT NULL)
+        ORDER BY name;
     `,
 };
