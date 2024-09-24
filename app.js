@@ -1,10 +1,10 @@
 const inquirer = require('inquirer');
-const pool = require('pg');
+const { Pool } = require('pg');
 const queries = require('./queries');
 
 // PostgreSQL connection configuration
 const pool = new Pool({
-    user: '',
+    user: 'postgres',
     host: 'localhost',
     database: 'employee_tracker',
     password: 'Walte1234',
@@ -14,46 +14,46 @@ const pool = new Pool({
 async function mainMenu() {
     const { choice } = await inquirer.prompt([
         {
-            type: `list`,
-            name: `choice`,
-            message: `What would you like to do?`,
+            type: 'list',
+            name: 'choice',
+            message: 'What would you like to do?',
             choices: [
-                `View all departments`,
-                `View all roles`,
-                `View all employees`,
-                `Add a department`,
-                `Add a role`,
-                `Add an employee`,
-                `Update an employee role`,
-                `Exit`
+                'View all departments',
+                'View all roles',
+                'View all employees',
+                'Add a department',
+                'Add a role',
+                'Add an employee',
+                'Update an employee role',
+                'Exit'
             ]
         }
     ]);
 
     switch (choice) {
-        case `View all departments`:
-            return viewDepartments();
+        case 'View all departments':
+            await viewDepartments();
             break;
-        case `View all roles`:
-            return viewRoles();
+        case 'View all roles':
+            await viewRoles();
             break;
-        case `View all employees`:
-            return viewEmployees();
+        case 'View all employees':
+            await viewEmployees();
             break;
-        case `Add a department`:
-            return addDepartment();
+        case 'Add a department':
+            await addDepartment();
             break;
-        case `Add a role`:
-            return addRole();
+        case 'Add a role':
+            await addRole();
             break;
-        case `Add an employee`:
-            return addEmployee();
+        case 'Add an employee':
+            await addEmployee();
             break;
-        case `Update an employee role`:
-            return updateEmployeeRole();
+        case 'Update an employee role':
+            await updateEmployeeRole();
             break;
-        case `Exit`:
-            console.log(`Goodbye!`);
+        case 'Exit':
+            console.log('Goodbye!');
             process.exit(0);
     }
     mainMenu();
@@ -75,11 +75,11 @@ async function viewEmployees() {
 }
 
 async function addDepartment() {
-    const {departmentName} = await inquirer.prompt([
+    const { departmentName } = await inquirer.prompt([
         {
-            type: `input`,
-            name: `departmentName`,
-            message: `Enter the name of the department:`
+            type: 'input',
+            name: 'departmentName',
+            message: 'Enter the name of the department:'
         }
     ]);
 
@@ -89,62 +89,62 @@ async function addDepartment() {
 
 async function addRole() {
     const departments = await pool.query(queries.GET_ALL_DEPARTMENTS);
-    const {title, salary, departmentId} = await inquirer.prompt([
+    const { title, salary, departmentId } = await inquirer.prompt([
         {
-            type: `input`,
-            name: `title`,
-            message: `Enter the title of the role:`
+            type: 'input',
+            name: 'title',
+            message: 'Enter the title of the role:'
         },
         {
-            type: `input`,
-            name: `salary`,
-            message: `Enter the salary of the role:`
+            type: 'input',
+            name: 'salary',
+            message: 'Enter the salary of the role:'
         },
         {
-            type: `list`,
-            name: `departmentId`,
-            message: `Select the department for the role:`,
+            type: 'list',
+            name: 'departmentId',
+            message: 'Select the department for the role:',
             choices: departments.rows.map(department => ({
                 name: department.name,
                 value: department.id
             }))
         }
     ]);
-}
 
-await pool.query(queries.ADD_ROLE, [title, salary, departmentId]);
-console.log(`${title} has been added.`);
+    await pool.query(queries.ADD_ROLE, [title, salary, departmentId]);
+    console.log(`${title} has been added.`);
+}
 
 async function addEmployee() {
     const roles = await pool.query(queries.GET_ALL_ROLES);
     const employees = await pool.query(queries.GET_ALL_EMPLOYEES);
-    const {firstName, lastName, roleId, managerId} = await inquirer.prompt([
+    const { firstName, lastName, roleId, managerId } = await inquirer.prompt([
         {
-            type: `input`,
-            name: `firstName`,
-            message: `Enter the employee's first name:`
+            type: 'input',
+            name: 'firstName',
+            message: "Enter the employee's first name:"
         },
         {
-            type: `input`,
-            name: `lastName`,
-            message: `Enter the employee's last name:`
+            type: 'input',
+            name: 'lastName',
+            message: "Enter the employee's last name:"
         },
         {
-            type: `list`,
-            name: `roleId`,
-            message: `Select the employee's role:`,
+            type: 'list',
+            name: 'roleId',
+            message: "Select the employee's role:",
             choices: roles.rows.map(role => ({
                 name: role.title,
                 value: role.id
             }))
         },
         {
-            type: `list`,
-            name: `managerId`,
-            message: `Select the employee's manager:`,
+            type: 'list',
+            name: 'managerId',
+            message: "Select the employee's manager:",
             choices: [
                 {
-                    name: `None`,
+                    name: 'None',
                     value: null
                 },
                 ...employees.rows.map(employee => ({
@@ -162,38 +162,38 @@ async function addEmployee() {
 async function updateEmployeeRole() {
     const employees = await pool.query(queries.GET_ALL_EMPLOYEES);
     const roles = await pool.query(queries.GET_ALL_ROLES);
-    const {employeeId, roleId} = await inquirer.prompt([
+    const { employeeId, newRoleId } = await inquirer.prompt([
         {
-            type: `list`,
-            name: `employeeId`,
-            message: `Select the employee to update:`,
+            type: 'list',
+            name: 'employeeId',
+            message: 'Select the employee to update:',
             choices: employees.rows.map(employee => ({
                 name: `${employee.first_name} ${employee.last_name}`,
                 value: employee.id
             }))
         },
         {
-            type: `list`,
-            name: `roleId`,
-            message: `Select the employee's new role:`,
+            type: 'list',
+            name: 'newRoleId',
+            message: "Select the employee's new role:",
             choices: roles.rows.map(role => ({
                 name: role.title,
                 value: role.id
             }))
         }
     ]);
-// need to add newRoleId to the queries.js file
+
     await pool.query(queries.UPDATE_EMPLOYEE_ROLE, [newRoleId, employeeId]);
-    console.log(`Employee role has been updated.`);
+    console.log('Employee role has been updated.');
 }
 
 async function main() {
-    try{
+    try {
         await pool.connect();
-        console.log(`Connected to the database.`);
+        console.log('Connected to the database.');
         await mainMenu();
     } catch (error) {
-        console.error(`Error`, error);
+        console.error('Error', error);
     } finally {
         await pool.end();
     }
