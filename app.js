@@ -193,7 +193,8 @@ async function main() {
         console.log('Connected to the database.');
         await mainMenu();
     } catch (error) {
-        console.error('Error', error);
+        console.error('Error:', error.message);
+        console.error('Stack:', error.stack);
     } finally {
         await pool.end();
     }
